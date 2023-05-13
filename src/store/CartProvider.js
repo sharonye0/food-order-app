@@ -38,21 +38,6 @@ const cartReducer = (state, action) => {
             totalPrice: updatedTotalPrice,
          };
 
-      // if (state.items.some((item) => item.id === action.item.id)) {
-      //    updatedItems = state.items.map((item) => {
-      //       if (item.id === action.item.id)
-      //          item.amount += action.item.amount;
-      //       return item;
-      //    });
-      // } else updatedItems = state.items.concat(action.item);
-
-      // updatedTotalPrice =
-      //    state.totalPrice + action.item.price * action.item.amount;
-      // return {
-      //    items: updatedItems,
-      //    totalPrice: updatedTotalPrice,
-      // };
-
       // SPLIT:
       case "REMOVE":
          existingCartItemIndex = state.items.findIndex(
@@ -74,18 +59,10 @@ const cartReducer = (state, action) => {
             items: updatedItems,
             totalPrice: updatedTotalPrice,
          };
-      // updatedItems = state.items.map((item) => {
-      //    if (item.id === action.id && item.amount > 0) --item.amount;
-      //    return item;
-      // });
-      // updatedTotalPrice = updatedItems.reduce(
-      //    (total, item) => total + item.price * item.amount,
-      //    0
-      // );
-      // return {
-      //    items: updatedItems,
-      //    totalPrice: updatedTotalPrice,
-      // };
+
+      case "CLEAR":
+         return defaultCartState;
+
       // SPLIT:
       default:
          console.error("cartReducer function isn't working as expected");
@@ -107,11 +84,16 @@ const CartProvider = (props) => {
       dispatchCartAction({ type: "REMOVE", id: id });
    };
 
+   const clearCartHandler = () => {
+      dispatchCartAction({ type: "CLEAR" });
+   };
+
    const cartContext = {
       items: cartState.items,
       totalPrice: cartState.totalPrice,
       addItem: addItemToCartHandler,
       removeItem: removeItemFromCartHandler,
+      clearCart: clearCartHandler,
    };
    return (
       <CartContext.Provider value={cartContext}>
